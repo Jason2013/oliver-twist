@@ -32,6 +32,15 @@
             "cwd": "${workspaceFolder}/docs/source"
         },
         {
+            "name": "Rename Files",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/docs/source/test.py",
+            "console": "integratedTerminal",
+            "args": "rename_files",
+            "cwd": "${workspaceFolder}/docs/source"
+        },
+        {
             "name": "Python Debugger: Python File",
             "type": "debugpy",
             "request": "launch",

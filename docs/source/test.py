@@ -92,11 +92,51 @@ def fix_footnote(filename):
         f.writelines(all_lines)
 
 
+def rename_files():
+    """
+    将所有以3个数字为前缀的文件重命名，使数字连续
+    """
+    # 获取所有匹配3个数字前缀的文件
+    files = []
+    pattern = r"^(\d{3})\.rst$"
+    
+    for filename in os.listdir():
+        m = re.match(pattern, filename)
+        if m:
+            files.append(filename)
+    
+    if not files:
+        print("没有找到以3个数字为前缀的 .rst 文件")
+        return
+    
+    # 按文件名排序
+    files.sort()
+    
+    print(f"找到 {len(files)} 个文件需要重命名:")
+    for i, old_filename in enumerate(files):
+        print(f"  {old_filename}")
+    
+    # 创建临时文件名映射，避免重命名冲突
+    temp_files = []
+    for i, old_filename in enumerate(files):
+        temp_filename = f"temp_{i:03d}.rst"
+        os.rename(old_filename, temp_filename)
+        temp_files.append((temp_filename, f"{i+1:03d}.rst"))
+        print(f"临时重命名: {old_filename} -> {temp_filename}")
+    
+    # 重命名为最终的连续编号
+    for temp_filename, new_filename in temp_files:
+        os.rename(temp_filename, new_filename)
+        print(f"最终重命名: {temp_filename} -> {new_filename}")
+    
+    print(f"重命名完成！文件编号现在从 001 到 {len(files):03d} 连续。")
+
+
 if __name__ == '__main__':
     # 创建命令行参数解析器
     parser = argparse.ArgumentParser(description='处理 RST 文件的工具')
-    parser.add_argument('action', choices=['check_footnote', 'fix_footnote', 'fix_chars'], 
-                       help='要执行的操作: check_footnote(检查脚注), fix_footnote(修复脚注), fix_chars(修复字符)')
+    parser.add_argument('action', choices=['check_footnote', 'fix_footnote', 'fix_chars', 'rename_files'], 
+                       help='要执行的操作: check_footnote(检查脚注), fix_footnote(修复脚注), fix_chars(修复字符), rename_files(重命名文件)')
     
     # 解析命令行参数
     args = parser.parse_args()
@@ -112,3 +152,5 @@ if __name__ == '__main__':
         f3(fix_footnote)
     elif args.action == 'fix_chars':
         f3(fix_chars)  # 调用修复字符的函数
+    elif args.action == 'rename_files':
+        rename_files()  # 重命名文件为连续编号
