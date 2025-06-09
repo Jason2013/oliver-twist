@@ -83,6 +83,9 @@ def footnote(filename):
     
     # 添加断言：确保不在行首的匹配和在行首的匹配数量相同
     assert not_at_start_count == at_start_count, f"匹配数量不相等：不在行首 {not_at_start_count} vs 在行首 {at_start_count}"
+
+    if not_at_start_count == 0:
+        return
     
     # 合并sentences和footnotes
     all_lines = sentences +  (['\n'] if sentences[-1] != '\n' else []) + footnotes
