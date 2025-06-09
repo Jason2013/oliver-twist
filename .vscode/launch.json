@@ -4,7 +4,33 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Check Footnote",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/docs/source/test.py",
+            "console": "integratedTerminal",
+            "args": "check_footnote",
+            "cwd": "${workspaceFolder}/docs/source"
+        },
+        {
+            "name": "Fix Footnote",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/docs/source/test.py",
+            "console": "integratedTerminal",
+            "args": "fix_footnote",
+            "cwd": "${workspaceFolder}/docs/source"
+        },
+        {
+            "name": "Fix Chars",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/docs/source/test.py",
+            "console": "integratedTerminal",
+            "args": "fix_chars",
+            "cwd": "${workspaceFolder}/docs/source"
+        },
         {
             "name": "Python Debugger: Python File",
             "type": "debugpy",

@@ -3,6 +3,7 @@
 import os
 import re
 import shutil
+import argparse
 
 def f1():
     for f in os.listdir():
@@ -13,33 +14,27 @@ def f1():
             os.remove(f)
 
 
-def f2():
+def fix_chars(filename):
+    with open(filename, encoding='utf-8') as fi:
+        s1 = fi.read()
+
+    s2 = s1.replace('*', '')
+    s2 = s2.replace('��', '阳')
+    # ��
+    if s2 != s1:
+        with open(filename, 'w', encoding='utf-8') as fo:
+            fo.write(s2)
+    print("fixed: %s" % filename)
+
+
+
+def f3(func):
     for f in os.listdir():
         pattern = r"^\d{3}\.rst$"
         m = re.match(pattern, f)
         if m:
             print(f)
-            # os.remove(f)
-
-            with open(f, encoding='utf-8') as fi:
-                s1 = fi.read()
-
-            s2 = s1.replace('*', '')
-            if s2 != s1:
-                with open(f, 'w', encoding='utf-8') as fo:
-                    fo.write(s2)
-                print("fixed: %s" % f)
-
-
-
-def f3():
-    for f in os.listdir():
-        pattern = r"^\d{3}\.rst$"
-        m = re.match(pattern, f)
-        if m:
-            print(f)
-            # check_footnote(f)
-            footnote(f)
+            func(f)
 
 
 def check_footnote(filename):
@@ -52,7 +47,7 @@ def check_footnote(filename):
                 print(s)
 
 
-def footnote(filename):
+def fix_footnote(filename):
     pattern = '[①②③④⑤⑥⑦⑧⑨]'
 
     sentences = []
@@ -96,4 +91,22 @@ def footnote(filename):
 
 
 if __name__ == '__main__':
-    f3()
+    # 创建命令行参数解析器
+    parser = argparse.ArgumentParser(description='处理 RST 文件的工具')
+    parser.add_argument('action', choices=['check_footnote', 'fix_footnote', 'fix_chars'], 
+                       help='要执行的操作: check_footnote(检查脚注), fix_footnote(修复脚注), fix_chars(修复字符)')
+    
+    # 解析命令行参数
+    args = parser.parse_args()
+    
+    # 打印 action 的值
+    print(f"执行操作: {args.action}")
+    
+    # 根据 action 参数执行相应的操作
+    if args.action == 'check_footnote':
+        f3(check_footnote)  # 调用 check_footnote 相关的函数
+    elif args.action == 'fix_footnote':
+        # 处理脚注修复
+        f3(fix_footnote)
+    elif args.action == 'fix_chars':
+        f3(fix_chars)  # 调用修复字符的函数
