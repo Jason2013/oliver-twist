@@ -20,6 +20,8 @@ def fix_chars(filename):
 
     s2 = s1.replace('*', '')
     s2 = s2.replace('��', '阳')
+    # 只有当空格前后都是中文字符时，才将空格替换为无
+    s2 = re.sub(r'([\u4e00-\u9fff]) ([\u4e00-\u9fff])', r'\1\2', s2)
     # ��
     if s2 != s1:
         with open(filename, 'w', encoding='utf-8') as fo:
